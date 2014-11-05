@@ -4,5 +4,6 @@
     <string name="app_name">RxExample</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="questions_list_header">#Android StackOverflow Questions</string>
 
 </resources>
