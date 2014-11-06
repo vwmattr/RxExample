@@ -2,16 +2,40 @@ package com.aweber.rxexample;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 
 public class MainActivity extends Activity {
+
+    Server server;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        RestAdapter restAdapter = createRestAdapter();
+        server = restAdapter.create(Server.class);
+
+
+        server.questions(new QuestionsCallback());
+    }
+
+    private RestAdapter createRestAdapter() {
+        final RestAdapter.Builder builder = new RestAdapter.Builder()
+                .setEndpoint("https://api.stackexchange.com")
+                .setLogLevel(RestAdapter.LogLevel.FULL);
+
+        return builder.build();
     }
 
 
@@ -35,5 +59,19 @@ public class MainActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    class QuestionsCallback implements Callback<Response> {
+
+        @Override
+        public void success(Response response, Response response2) {
+            Toast.makeText(MainActivity.this, "Success!", Toast.LENGTH_SHORT).show();
+            Log.d("QuestionsCallback", response.getBody().toString());
+        }
+
+        @Override
+        public void failure(RetrofitError error) {
+            Toast.makeText(MainActivity.this, "ERROR!", Toast.LENGTH_SHORT).show();
+        }
     }
 }
