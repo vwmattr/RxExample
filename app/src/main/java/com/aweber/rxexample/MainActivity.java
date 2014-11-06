@@ -7,6 +7,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.aweber.rxexample.entities.QuestionList;
+
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -61,12 +63,15 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    class QuestionsCallback implements Callback<Response> {
+    class QuestionsCallback implements Callback<QuestionList> {
 
         @Override
-        public void success(Response response, Response response2) {
+        public void success(QuestionList questionList, Response response) {
             Toast.makeText(MainActivity.this, "Success!", Toast.LENGTH_SHORT).show();
-            Log.d("QuestionsCallback", response.getBody().toString());
+            if (questionList != null && questionList.getItems() != null) {
+                Log.d("QuestionsCallback", "Question Count: " + questionList.getItems().size() + ", First Question: " + questionList.getItems().get(0).getTitle());
+            }
+            Log.d("QuestionsCallback", "QuotaMax: " + questionList.getQuotaMax() + ", QuotaRemaining: " + questionList.getQuotaRemaining() + ", HasMore: " + questionList.isHasMore());
         }
 
         @Override
