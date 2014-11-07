@@ -14,6 +14,9 @@ import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 
 public class MainActivity extends Activity {
@@ -33,7 +36,21 @@ public class MainActivity extends Activity {
 
         RestAdapter restAdapter = createRestAdapter();
         server = restAdapter.create(Server.class);
-        server.questions(new QuestionsCallback());
+
+        server.questions()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<QuestionList>() {
+                    @Override
+                    public void call(QuestionList questionList) {
+                        if (questionList != null && questionList.getItems() != null) {
+                            Log.d("QuestionsCallback", "Question Count: " + questionList.getItems().size());
+                            adapter.setQuestions(questionList.getItems());
+                        } else {
+                            Log.d("QuestionsCallback", "No questions returned from /questions API call");
+                        }
+                    }
+                });
     }
 
     private RestAdapter createRestAdapter() {
@@ -67,20 +84,4 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    class QuestionsCallback implements Callback<QuestionList> {
-
-        @Override
-        public void success(QuestionList questionList, Response response) {
-            Toast.makeText(MainActivity.this, "Success!", Toast.LENGTH_SHORT).show();
-            if (questionList != null && questionList.getItems() != null) {
-                Log.d("QuestionsCallback", "Question Count: " + questionList.getItems().size());
-                adapter.setQuestions(questionList.getItems());
-            }
-        }
-
-        @Override
-        public void failure(RetrofitError error) {
-            Toast.makeText(MainActivity.this, "ERROR!", Toast.LENGTH_SHORT).show();
-        }
-    }
 }
