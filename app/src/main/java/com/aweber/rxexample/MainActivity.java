@@ -5,29 +5,52 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 import android.widget.Toast;
+
+import com.aweber.rxexample.entities.QuestionList;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 
 public class MainActivity extends Activity {
 
     Server server;
+    ListView listView;
+    QuestionListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        adapter = new QuestionListAdapter(this);
+        listView = (ListView) findViewById(R.id.list);
+        listView.setAdapter(adapter);
 
         RestAdapter restAdapter = createRestAdapter();
         server = restAdapter.create(Server.class);
 
-
-        server.questions(new QuestionsCallback());
+        server.questions()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<QuestionList>() {
+                    @Override
+                    public void call(QuestionList questionList) {
+                        if (questionList != null && questionList.getItems() != null) {
+                            Log.d("QuestionsCallback", "Question Count: " + questionList.getItems().size());
+                            adapter.setQuestions(questionList.getItems());
+                        } else {
+                            Log.d("QuestionsCallback", "No questions returned from /questions API call");
+                        }
+                    }
+                });
     }
 
     private RestAdapter createRestAdapter() {
@@ -61,17 +84,4 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    class QuestionsCallback implements Callback<Response> {
-
-        @Override
-        public void success(Response response, Response response2) {
-            Toast.makeText(MainActivity.this, "Success!", Toast.LENGTH_SHORT).show();
-            Log.d("QuestionsCallback", response.getBody().toString());
-        }
-
-        @Override
-        public void failure(RetrofitError error) {
-            Toast.makeText(MainActivity.this, "ERROR!", Toast.LENGTH_SHORT).show();
-        }
-    }
 }
