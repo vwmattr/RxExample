@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.aweber.rxexample.entities.QuestionList;
@@ -18,17 +19,20 @@ import retrofit.client.Response;
 public class MainActivity extends Activity {
 
     Server server;
+    ListView listView;
+    QuestionListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        adapter = new QuestionListAdapter(this);
+        listView = (ListView) findViewById(R.id.list);
+        listView.setAdapter(adapter);
 
         RestAdapter restAdapter = createRestAdapter();
         server = restAdapter.create(Server.class);
-
-
         server.questions(new QuestionsCallback());
     }
 
@@ -69,9 +73,9 @@ public class MainActivity extends Activity {
         public void success(QuestionList questionList, Response response) {
             Toast.makeText(MainActivity.this, "Success!", Toast.LENGTH_SHORT).show();
             if (questionList != null && questionList.getItems() != null) {
-                Log.d("QuestionsCallback", "Question Count: " + questionList.getItems().size() + ", First Question: " + questionList.getItems().get(0).getTitle());
+                Log.d("QuestionsCallback", "Question Count: " + questionList.getItems().size());
+                adapter.setQuestions(questionList.getItems());
             }
-            Log.d("QuestionsCallback", "QuotaMax: " + questionList.getQuotaMax() + ", QuotaRemaining: " + questionList.getQuotaRemaining() + ", HasMore: " + questionList.isHasMore());
         }
 
         @Override

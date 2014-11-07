@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:minHeight="@dimen/question_list_item_height" >
+
+    <TextView
+        android:id="@+id/title"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:paddingTop="@dimen/list_item_vert_padding"
+        android:paddingBottom="@dimen/list_item_vert_padding"
+        android:paddingLeft="@dimen/list_item_hozo_padding"
+        android:paddingRight="@dimen/list_item_hozo_padding"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true" />
+
+</RelativeLayout>
