@@ -1,4 +1,4 @@
-package com.aweber.rxexample.entities;
+package com.vwmattr.rxexample.entities;
 
 import com.google.gson.annotations.SerializedName;
 

@@ -1,4 +1,4 @@
-package com.aweber.rxexample;
+package com.vwmattr.rxexample;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -6,14 +6,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import com.aweber.rxexample.entities.QuestionList;
+import com.aweber.rxexample.R;
+import com.vwmattr.rxexample.entities.QuestionList;
 
-import retrofit.Callback;
 import retrofit.RestAdapter;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;

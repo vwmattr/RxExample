@@ -1,4 +1,4 @@
-package com.aweber.rxexample;
+package com.vwmattr.rxexample;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
