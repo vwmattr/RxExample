@@ -1,6 +1,6 @@
-package com.aweber.rxexample;
+package com.vwmattr.rxexample;
 
-import com.aweber.rxexample.entities.QuestionList;
+import com.vwmattr.rxexample.entities.QuestionList;
 
 import retrofit.http.GET;
 import rx.Observable;
