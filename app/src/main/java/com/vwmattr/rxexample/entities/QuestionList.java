@@ -24,8 +24,9 @@ public class QuestionList {
         return items;
     }
 
-    public void setItems(List<Question> items) {
+    public QuestionList setItems(List<Question> items) {
         this.items = items;
+        return this;
     }
 
     public int getQuotaMax() {

@@ -13,16 +13,27 @@ import com.vwmattr.rxexample.modules.AppModule;
 public class App extends Application {
     private AppComponent component;
 
-    @Override public void onCreate() {
+    @Override
+    public void onCreate() {
         super.onCreate();
         setupGraph();
     }
 
     private void setupGraph() {
-        component = DaggerAppComponent.builder()
-                .appModule(new AppModule(this))
-                .build();
-        component.inject(this);
+        if (component == null) {
+            component = DaggerAppComponent.builder()
+                    .appModule(new AppModule(this))
+                    .build();
+            component.inject(this);
+        }
+    }
+
+    /**
+     * Set a component that provides mock versions of dependencies in tests.
+     * @param component
+     */
+    public void setComponent(AppComponent component) {
+        this.component = component;
     }
 
     public AppComponent component() {

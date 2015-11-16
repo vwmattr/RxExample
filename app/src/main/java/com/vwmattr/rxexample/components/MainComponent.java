@@ -2,7 +2,6 @@ package com.vwmattr.rxexample.components;
 
 import com.vwmattr.rxexample.ActivityScope;
 import com.vwmattr.rxexample.MainActivity;
-import com.vwmattr.rxexample.modules.MainModule;
 
 import dagger.Component;
 
@@ -11,8 +10,7 @@ import dagger.Component;
  */
 @ActivityScope
 @Component(
-        dependencies = AppComponent.class,
-        modules = MainModule.class
+        dependencies = AppComponent.class
 )
 public interface MainComponent {
     void inject(MainActivity activity);

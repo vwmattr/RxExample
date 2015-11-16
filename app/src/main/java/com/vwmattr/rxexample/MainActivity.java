@@ -2,15 +2,15 @@ package com.vwmattr.rxexample;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListView;
 
 import com.vwmattr.rxexample.components.AppComponent;
 import com.vwmattr.rxexample.components.DaggerMainComponent;
 import com.vwmattr.rxexample.entities.QuestionList;
-import com.vwmattr.rxexample.modules.MainModule;
 
 import javax.inject.Inject;
 
@@ -23,7 +23,7 @@ public class MainActivity extends Activity {
 
     @Inject
     Server server;
-    ListView listView;
+    RecyclerView recyclerView;
     QuestionListAdapter adapter;
 
     @Override
@@ -32,9 +32,11 @@ public class MainActivity extends Activity {
         setupComponent(App.get(this).component());
         setContentView(R.layout.activity_main);
 
-        adapter = new QuestionListAdapter(this);
-        listView = (ListView) findViewById(R.id.list);
-        listView.setAdapter(adapter);
+        adapter = new QuestionListAdapter();
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        recyclerView.setAdapter(adapter);
 
         server.questions()
                 .subscribeOn(Schedulers.io())
@@ -55,7 +57,6 @@ public class MainActivity extends Activity {
     protected void setupComponent(AppComponent appComponent) {
         DaggerMainComponent.builder()
                 .appComponent(appComponent)
-                .mainModule(new MainModule())
                 .build()
                 .inject(this);
     }
