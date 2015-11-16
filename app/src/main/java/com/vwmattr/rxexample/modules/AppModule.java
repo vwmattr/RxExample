@@ -3,11 +3,13 @@ package com.vwmattr.rxexample.modules;
 import android.app.Application;
 
 import com.vwmattr.rxexample.App;
+import com.vwmattr.rxexample.api.RestApiAdapter;
 
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import retrofit.RestAdapter;
 
 /**
  * Created by rein on 11/15/15.
@@ -25,5 +27,10 @@ public class AppModule {
     @Singleton
     public Application provideApplication() {
         return app;
+    }
+
+    @Provides
+    public RestAdapter provideRestAdapter() {
+        return RestApiAdapter.getInstance();
     }
 }

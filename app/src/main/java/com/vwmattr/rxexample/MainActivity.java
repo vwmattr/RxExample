@@ -7,9 +7,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 
+import com.vwmattr.rxexample.components.AppComponent;
+import com.vwmattr.rxexample.components.DaggerMainComponent;
 import com.vwmattr.rxexample.entities.QuestionList;
+import com.vwmattr.rxexample.modules.MainModule;
 
-import retrofit.RestAdapter;
+import javax.inject.Inject;
+
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -17,6 +21,7 @@ import rx.schedulers.Schedulers;
 
 public class MainActivity extends Activity {
 
+    @Inject
     Server server;
     ListView listView;
     QuestionListAdapter adapter;
@@ -24,14 +29,12 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setupComponent(App.get(this).component());
         setContentView(R.layout.activity_main);
 
         adapter = new QuestionListAdapter(this);
         listView = (ListView) findViewById(R.id.list);
         listView.setAdapter(adapter);
-
-        RestAdapter restAdapter = createRestAdapter();
-        server = restAdapter.create(Server.class);
 
         server.questions()
                 .subscribeOn(Schedulers.io())
@@ -49,14 +52,13 @@ public class MainActivity extends Activity {
                 });
     }
 
-    private RestAdapter createRestAdapter() {
-        final RestAdapter.Builder builder = new RestAdapter.Builder()
-                .setEndpoint("https://api.stackexchange.com")
-                .setLogLevel(RestAdapter.LogLevel.FULL);
-
-        return builder.build();
+    protected void setupComponent(AppComponent appComponent) {
+        DaggerMainComponent.builder()
+                .appComponent(appComponent)
+                .mainModule(new MainModule())
+                .build()
+                .inject(this);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
