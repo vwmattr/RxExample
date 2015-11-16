@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.aweber.rxexample.R;
 import com.vwmattr.rxexample.entities.Question;
 
 import java.util.ArrayList;

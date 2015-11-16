@@ -3,8 +3,6 @@ package com.vwmattr.rxexample;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.aweber.rxexample.R;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,7 +23,6 @@ public class MainActivityTest {
             MainActivity.class,
             true); // initialTouchMode
             //false);  // launchActivity. False so we can customize the intent per test method
-
 
     @Test
     public void header() {

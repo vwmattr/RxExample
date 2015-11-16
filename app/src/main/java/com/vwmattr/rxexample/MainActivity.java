@@ -7,7 +7,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 
-import com.aweber.rxexample.R;
 import com.vwmattr.rxexample.entities.QuestionList;
 
 import retrofit.RestAdapter;
