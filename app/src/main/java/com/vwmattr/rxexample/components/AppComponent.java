@@ -6,6 +6,7 @@ import com.vwmattr.rxexample.modules.AppModule;
 import javax.inject.Singleton;
 
 import dagger.Component;
+import retrofit.RestAdapter;
 
 /**
  * Created by rein on 11/15/15.
@@ -19,4 +20,5 @@ import dagger.Component;
 
 public interface AppComponent {
     void inject(App app);
+    RestAdapter getRestAdapter();
 }
