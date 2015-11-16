@@ -21,8 +21,9 @@ public class Question {
         return title;
     }
 
-    public void setTitle(String title) {
+    public Question setTitle(String title) {
         this.title = title;
+        return this;
     }
 
     public int getQuestionId() {
