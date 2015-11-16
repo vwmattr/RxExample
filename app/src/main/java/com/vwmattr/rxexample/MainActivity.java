@@ -10,7 +10,6 @@ import android.widget.ListView;
 import com.vwmattr.rxexample.components.AppComponent;
 import com.vwmattr.rxexample.components.DaggerMainComponent;
 import com.vwmattr.rxexample.entities.QuestionList;
-import com.vwmattr.rxexample.modules.MainModule;
 
 import javax.inject.Inject;
 
@@ -55,7 +54,6 @@ public class MainActivity extends Activity {
     protected void setupComponent(AppComponent appComponent) {
         DaggerMainComponent.builder()
                 .appComponent(appComponent)
-                .mainModule(new MainModule())
                 .build()
                 .inject(this);
     }

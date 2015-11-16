@@ -30,6 +30,7 @@ public class AppModule {
     }
 
     @Provides
+    @Singleton
     public RestAdapter provideRestAdapter() {
         return RestApiAdapter.getInstance();
     }
