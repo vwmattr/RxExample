@@ -14,9 +14,10 @@ import com.vwmattr.rxexample.entities.QuestionList;
 
 import javax.inject.Inject;
 
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
+import retrofit.Call;
+import retrofit.Callback;
+import retrofit.Response;
+import retrofit.Retrofit;
 
 
 public class MainActivity extends Activity {
@@ -38,20 +39,41 @@ public class MainActivity extends Activity {
 
         recyclerView.setAdapter(adapter);
 
-        server.questions()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<QuestionList>() {
-                    @Override
-                    public void call(QuestionList questionList) {
-                        if (questionList != null && questionList.getItems() != null) {
-                            Log.d("QuestionsCallback", "Question Count: " + questionList.getItems().size());
-                            adapter.setQuestions(questionList.getItems());
-                        } else {
-                            Log.d("QuestionsCallback", "No questions returned from /questions API call");
-                        }
-                    }
-                });
+        //Retrofit 2.0 way:
+        Call<QuestionList> call = server.questions();
+        call.enqueue(new Callback<QuestionList>() {
+            @Override
+            public void onResponse(Response<QuestionList> response, Retrofit retrofit) {
+                QuestionList questionList = response.body();
+                if (questionList != null && questionList.getItems() != null) {
+                    Log.d("QuestionsCallback", "Question Count: " + questionList.getItems().size());
+                    adapter.setQuestions(questionList.getItems());
+                } else {
+                    Log.d("QuestionsCallback", "No questions returned from /questions API call");
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+            }
+        });
+
+        //Retrofit 1.7 + RxJava way:
+//        server.questions()
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Action1<QuestionList>() {
+//                    @Override
+//                    public void call(QuestionList questionList) {
+//                        if (questionList != null && questionList.getItems() != null) {
+//                            Log.d("QuestionsCallback", "Question Count: " + questionList.getItems().size());
+//                            adapter.setQuestions(questionList.getItems());
+//                        } else {
+//                            Log.d("QuestionsCallback", "No questions returned from /questions API call");
+//                        }
+//                    }
+//                });
     }
 
     protected void setupComponent(AppComponent appComponent) {

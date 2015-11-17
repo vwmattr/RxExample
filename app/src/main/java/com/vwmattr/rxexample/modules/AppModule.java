@@ -3,13 +3,13 @@ package com.vwmattr.rxexample.modules;
 import android.app.Application;
 
 import com.vwmattr.rxexample.App;
-import com.vwmattr.rxexample.api.RestApiAdapter;
 
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import retrofit.RestAdapter;
+import retrofit.GsonConverterFactory;
+import retrofit.Retrofit;
 
 /**
  * Created by rein on 11/15/15.
@@ -31,7 +31,12 @@ public class AppModule {
 
     @Provides
     @Singleton
-    public RestAdapter provideRestAdapter() {
-        return RestApiAdapter.getInstance();
+    public Retrofit provideRetrofit() {
+        return new Retrofit.Builder()
+                .baseUrl("https://api.stackexchange.com")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        //TODO: If I want logging, I'll have to add an interceptor to this.  See: https://github.com/square/okhttp/wiki/Interceptors
+//        .setLogLevel(RestAdapter.LogLevel.FULL)
     }
 }
