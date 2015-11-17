@@ -4,7 +4,7 @@ import com.vwmattr.rxexample.Server;
 
 import dagger.Module;
 import dagger.Provides;
-import retrofit.RestAdapter;
+import retrofit.Retrofit;
 
 /**
  * Created by rein on 11/16/15.
@@ -13,7 +13,7 @@ import retrofit.RestAdapter;
 public class ApiModule {
 
     @Provides
-    public Server provideServer(RestAdapter restAdapter) {
-        return restAdapter.create(Server.class);
+    public Server provideServer(Retrofit retrofit) {
+        return retrofit.create(Server.class);
     }
 }

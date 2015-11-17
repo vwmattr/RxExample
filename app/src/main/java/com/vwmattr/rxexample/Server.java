@@ -2,6 +2,7 @@ package com.vwmattr.rxexample;
 
 import com.vwmattr.rxexample.entities.QuestionList;
 
+import retrofit.Call;
 import retrofit.http.GET;
 import rx.Observable;
 
@@ -11,10 +12,15 @@ import rx.Observable;
  */
 public interface Server {
 
-    static final String QUESTIONS_ENDPOINT =
+    String QUESTIONS_ENDPOINT =
             "/2.2/questions?order=desc&sort=activity&tagged=android&site=stackoverflow";
 
+    //Vanilla Retrofit 2.0:
     @GET(QUESTIONS_ENDPOINT)
-    Observable<QuestionList> questions();
+    Call<QuestionList> questions();
+
+    //Retrofit 2.0 + RxJava:
+    @GET(QUESTIONS_ENDPOINT)
+    Observable<QuestionList> questionsRx();
 
 }
