@@ -10,6 +10,7 @@ import dagger.Module;
 import dagger.Provides;
 import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
+import retrofit.RxJavaCallAdapterFactory;
 
 /**
  * Created by rein on 11/15/15.
@@ -35,6 +36,7 @@ public class AppModule {
         return new Retrofit.Builder()
                 .baseUrl("https://api.stackexchange.com")
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
         //TODO: If I want logging, I'll have to add an interceptor to this.  See: https://github.com/square/okhttp/wiki/Interceptors
 //        .setLogLevel(RestAdapter.LogLevel.FULL)

@@ -18,6 +18,9 @@ import retrofit.Call;
 import retrofit.Callback;
 import retrofit.Response;
 import retrofit.Retrofit;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 
 public class MainActivity extends Activity {
@@ -39,7 +42,32 @@ public class MainActivity extends Activity {
 
         recyclerView.setAdapter(adapter);
 
-        //Retrofit 2.0 way:
+//        fetchQuestions();
+        fetchQuestionsRx();
+    }
+
+    private void fetchQuestionsRx() {
+        //Retrofit2.0 + RxJava:
+        server.questionsRx()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<QuestionList>() {
+                    @Override
+                    public void call(QuestionList questionList) {
+                        if (questionList != null && questionList.getItems() != null) {
+                            Log.d("questionsRx", "Question Count: "
+                                    + questionList.getItems().size());
+                            adapter.setQuestions(questionList.getItems());
+                        } else {
+                            Log.d("questionsRx",
+                                    "No questions returned from /questions API call");
+                        }
+                    }
+                });
+    }
+
+    private void fetchQuestions() {
+        //Async Retrofit 2.0 (vanilla):
         Call<QuestionList> call = server.questions();
         call.enqueue(new Callback<QuestionList>() {
             @Override
@@ -55,25 +83,9 @@ public class MainActivity extends Activity {
 
             @Override
             public void onFailure(Throwable t) {
-
+                //NO-OP
             }
         });
-
-        //Retrofit 1.7 + RxJava way:
-//        server.questions()
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new Action1<QuestionList>() {
-//                    @Override
-//                    public void call(QuestionList questionList) {
-//                        if (questionList != null && questionList.getItems() != null) {
-//                            Log.d("QuestionsCallback", "Question Count: " + questionList.getItems().size());
-//                            adapter.setQuestions(questionList.getItems());
-//                        } else {
-//                            Log.d("QuestionsCallback", "No questions returned from /questions API call");
-//                        }
-//                    }
-//                });
     }
 
     protected void setupComponent(AppComponent appComponent) {

@@ -13,6 +13,7 @@ import dagger.Module;
 import dagger.Provides;
 import retrofit.Call;
 import retrofit.Callback;
+import rx.Observable;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doAnswer;
@@ -33,9 +34,10 @@ public class MockApiModule {
         Question q3 = new Question().setTitle("Title of question 3");
         final QuestionList questionList = new QuestionList().setItems(Arrays.asList(q1, q2, q3));
 
-        //TODO: When we add Rx Back.. this may be helpful.
-//        when(server.questions()).thenReturn(Observable.just(questionList));
+        //Setup the Mock for the Rx Retrofit callback
+        when(server.questionsRx()).thenReturn(Observable.just(questionList));
 
+        //Setup the Mock for the 'vanilla' Retrofit callback
         Call<QuestionList> mockCall = mock(Call.class);
         doAnswer(new Answer() {
             @Override
